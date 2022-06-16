@@ -6,7 +6,33 @@ from .serializers import StudentSerializer, SchoolSerializer
 
 from rest_framework import generics
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from django.http import HttpResponse
+import csv
 
+def student_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Description'] = 'attachment; filename=students.csv'
+
+    writer = csv.writer(response)
+    students = Student.objects.all()
+    writer.writerow(['first_name','last_name','student_id','school_id'])
+
+    for e in students:
+        #x = str(e.school_id)
+        writer.writerow([e.first_name, e.last_name, e.student_id, e.school_id.school_name])
+    return response
+
+def school_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Description'] = 'attachment; filename=schools.csv'
+
+    writer = csv.writer(response)
+    schools = School.objects.all()
+    writer.writerow(['school_name','max_student'])
+
+    for e in schools:
+        writer.writerow([e.school_name, e.max_student])
+    return response
 
 class StudentList(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StudentSerializer
