@@ -7,6 +7,8 @@ from school.models import Student,School
 from .serializers import StudentSerializer, SchoolSerializer
 
 urlpatterns = [
+    path('downloadStudent.csv', views.student_csv, name='student_csv'),
+    path('downloadSchool.csv', views.school_csv, name='school_csv'),
     path('students/', ListCreateAPIView.as_view(queryset=Student.objects.all(), serializer_class=StudentSerializer), name='student-list'),
     path('schools/', ListCreateAPIView.as_view(queryset=School.objects.all(), serializer_class=SchoolSerializer), name='school-list'),
 
